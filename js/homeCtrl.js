@@ -1,5 +1,40 @@
 app.controller('homeCtrl', function($scope, profileService) {
-	$scope.myProfile = profileService.checkForProfile();
+
+  $scope.editing = false;
+
+  $scope.saveProfile = function(profile) {
+    profileService.saveProfile(profile);
+    $scope.editing = false;
+  }
+
+   $scope.deleteProfile = function() {
+      profileService.deleteProfile()
+        .then(function(deletedProfile) {
+          localStorage.removeItem('profileId');
+          $scope.myProfile = {};
+    })
+      .catch(function(err) {
+        console.error(err);
+      });
+  }
+
+	$scope.checkForProfile = function() {
+    var profileId = JSON.parse(localStorage.getItem('profileId'));
+
+    if (profileId) {
+      profileService.checkForProfile(profileId.profileId)
+        .then(function(profile) {
+           $scope.myProfile = profile.data;
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
+    }
+  }
+
+    $scope.checkForProfile();
+
+
 	$scope.sortOptions = [{
     display: 'Ascending'
   , value: false
@@ -10,19 +45,6 @@ app.controller('homeCtrl', function($scope, profileService) {
   }
 ];
 
-  $scope.editing = false;
 
-  profileService.serviceTest();
 
-  $scope.saveProfile = function(profile) {
-    profileService.saveProfile(profile);
-    $scope.editing = false;
-  }
-
-  $scope.deleteProfile = function() {
-    profileService.deleteProfile();
-    $scope.myProfile = profileService.checkForProfile();
-  }
-
-  $scope.myProfile = profileService.checkForProfile();
 });
