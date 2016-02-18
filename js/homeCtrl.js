@@ -1,4 +1,4 @@
-app.controller('homeCtrl', function($scope, profileService) {
+app.controller('homeCtrl', function($scope, profileService, friendService) {
 
   $scope.editing = false;
 
@@ -25,6 +25,7 @@ app.controller('homeCtrl', function($scope, profileService) {
       profileService.checkForProfile(profileId.profileId)
         .then(function(profile) {
            $scope.myProfile = profile.data;
+           friendService.findFriendsFriends(profile.data);
       })
       .catch(function(err) {
         console.error(err);
@@ -45,6 +46,26 @@ app.controller('homeCtrl', function($scope, profileService) {
   }
 ];
 
+$scope.findFriends = function(query) {
+  friendService.findFriends($scope.myProfile._id, query)
+  .then(function(potentialFriends) {
+    $scope.potentialFriends = potentialFriends;
+  })
+}
+
+$scope.addFriend = function(friendId) {
+  friendService.addFriend($scope.myProfile._id, friendId)
+  .then(function() {
+    $scope.checkForProfile();
+  })
+}
+
+$scope.removeFriend = function(friendId) {
+  friendService.removeFriend($scope.myProfile._id, friendId)
+  .then(function() {
+    $scope.checkForProfile();
+  })
+}
 
 
 });

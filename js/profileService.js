@@ -1,5 +1,5 @@
 app.service('profileService', function($http) {
-	var baseUrl = 'http://localhost:8081'
+	var baseUrl = 'http://connections.devmounta.in'
 
 	this.serviceTest = function() {
   console.log('profileService is connected!');
@@ -8,7 +8,7 @@ app.service('profileService', function($http) {
 	this.saveProfile = function(profile) {
   		$http({ // Requests that your profile be added to the database
    			  method: 'POST'
-  			, url: baseUrl + '/api/profiles'
+  			, url: baseUrl + '/api/profiles/'
   			, data: profile
   		})
   		.then(function(profileResponse) { // What to do after a response comes back from the server.
@@ -24,7 +24,7 @@ app.service('profileService', function($http) {
 	this.checkForProfile = function(profileId) {
 		return $http({
 			method: 'GET'
-			, url: baseUrl + '/api/profiles' + profileId
+		  , url: baseUrl + '/api/profiles/' + profileId
 		});
 	}
 
